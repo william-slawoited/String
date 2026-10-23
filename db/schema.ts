@@ -1,14 +1,7 @@
 import { sqliteTable, text, integer, primaryKey } from "drizzle-orm/sqlite-core";
+import { user } from "./auth-schema";
 
-export const users = sqliteTable("users", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
-  email: text("email").notNull().unique(),
-  username: text("username").notNull().unique(),
-  passwordHash: text("password_hash").notNull(),
-  createdAt: integer("created_at", { mode: "timestamp" })
-    .notNull()
-    .$defaultFn(() => new Date()),
-});
+export * from "./auth-schema";
 
 export const scores = sqliteTable("scores", {
   id: integer("id").primaryKey({ autoIncrement: true }),
@@ -18,7 +11,7 @@ export const scores = sqliteTable("scores", {
   genre: text("genre"),
   difficulty: integer("difficulty"),
   fileUrl: text("file_url"),
-  uploadedBy: integer("uploaded_by").references(() => users.id),
+  uploadedBy: text("uploaded_by").references(() => user.id),
   createdAt: integer("created_at", { mode: "timestamp" })
     .notNull()
     .$defaultFn(() => new Date()),
@@ -27,9 +20,9 @@ export const scores = sqliteTable("scores", {
 export const favorites = sqliteTable(
   "favorites",
   {
-    userId: integer("user_id")
+    userId: text("user_id")
       .notNull()
-      .references(() => users.id),
+      .references(() => user.id),
     scoreId: integer("score_id")
       .notNull()
       .references(() => scores.id),
