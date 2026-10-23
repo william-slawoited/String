@@ -10,6 +10,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
+export const instant = false;
+
 export default async function ProfilPage() {
   const session = await auth.api.getSession({ headers: await headers() });
 
