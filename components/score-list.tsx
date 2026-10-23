@@ -1,9 +1,16 @@
 import Link from "next/link";
 import { scores } from "@/db/schema";
+import { DeleteScoreButton } from "@/components/delete-score-button";
 
 type Score = typeof scores.$inferSelect;
 
-export function ScoreList({ items }: { items: Score[] }) {
+export function ScoreList({
+  items,
+  deletable = false,
+}: {
+  items: Score[];
+  deletable?: boolean;
+}) {
   if (items.length === 0) {
     return <p className="text-sm text-muted-foreground">Zatím tu nic není.</p>;
   }
@@ -24,13 +31,12 @@ export function ScoreList({ items }: { items: Score[] }) {
               {s.difficulty ? ` · obtížnost ${s.difficulty}/5` : ""}
             </p>
           </div>
-          <a
-            href={`/noty/${s.id}/soubor`}
-            download
-            className="shrink-0 text-sm underline"
-          >
-            Stáhnout
-          </a>
+          <div className="flex shrink-0 items-center gap-4">
+            <a href={`/noty/${s.id}/soubor`} download className="text-sm underline">
+              Stáhnout
+            </a>
+            {deletable && <DeleteScoreButton id={s.id} title={s.title} />}
+          </div>
         </li>
       ))}
     </ul>

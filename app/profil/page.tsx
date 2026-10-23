@@ -33,7 +33,7 @@ export default async function ProfilPage() {
 
         <section className="flex flex-col gap-3">
           <h2 className="text-xl font-semibold">Moje nahrané noty</h2>
-          <ScoreList items={mine} />
+          <ScoreList items={mine} deletable />
         </section>
 
         <section className="flex flex-col gap-3">
