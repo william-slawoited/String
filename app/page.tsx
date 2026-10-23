@@ -46,6 +46,15 @@ export default async function Home() {
             Hledat noty
           </Link>
           <Link
+            href="/nahrat"
+            className={buttonVariants({
+              size: "lg",
+              className: blackButton,
+            })}
+          >
+            Nahrát noty
+          </Link>
+          <Link
             href="/profil"
             className={buttonVariants({
               size: "lg",

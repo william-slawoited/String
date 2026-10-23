@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
+import { SiteHeader } from "@/components/site-header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -25,7 +26,9 @@ export default async function NahratPage({
   const { chyba } = await searchParams;
 
   return (
-    <main className="flex min-h-screen items-center justify-center p-6">
+    <>
+    <SiteHeader />
+    <main className="flex justify-center p-6">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>Nahrát noty</CardTitle>
@@ -90,10 +93,11 @@ export default async function NahratPage({
               </span>
             </label>
             {chyba && <p className="text-sm text-red-600">{chyba}</p>}
-            <Button type="submit">Nahrát</Button>
+            <Button type="submit" className="bg-black text-white hover:bg-black/80">Nahrát</Button>
           </form>
         </CardContent>
       </Card>
     </main>
+    </>
   );
 }

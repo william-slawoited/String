@@ -1,45 +1,50 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { desc, eq } from "drizzle-orm";
 import { auth } from "@/lib/auth";
+import { db } from "@/db";
+import { scores } from "@/db/schema";
+import { SiteHeader } from "@/components/site-header";
+import { ScoreList } from "@/components/score-list";
 import { LogoutButton } from "@/components/logout-button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 
 export const instant = false;
 
 export default async function ProfilPage() {
   const session = await auth.api.getSession({ headers: await headers() });
-
-  if (!session) {
-    redirect("/prihlaseni");
-  }
+  if (!session) redirect("/prihlaseni");
 
   const { user } = session;
 
+  const mine = await db
+    .select()
+    .from(scores)
+    .where(eq(scores.uploadedBy, user.id))
+    .orderBy(desc(scores.createdAt));
+
   return (
-    <main className="flex min-h-screen items-center justify-center p-6">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>{user.name}</CardTitle>
-          <CardDescription>Tvůj profil na String</CardDescription>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-4">
-          <div>
-            <p className="text-sm text-muted-foreground">E-mail</p>
-            <p>{user.email}</p>
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground">Oblíbené noty</p>
-            <p className="text-sm">Zatím žádné.</p>
-          </div>
+    <>
+      <SiteHeader />
+      <main className="mx-auto flex w-full max-w-2xl flex-col gap-8 p-6">
+        <section className="flex flex-col gap-1">
+          <h1 className="text-3xl font-bold tracking-tight">{user.name}</h1>
+          <p className="text-muted-foreground">{user.email}</p>
+        </section>
+
+        <section className="flex flex-col gap-3">
+          <h2 className="text-xl font-semibold">Moje nahrané noty</h2>
+          <ScoreList items={mine} />
+        </section>
+
+        <section className="flex flex-col gap-3">
+          <h2 className="text-xl font-semibold">Oblíbené noty</h2>
+          <p className="text-sm text-muted-foreground">Zatím žádné.</p>
+        </section>
+
+        <div>
           <LogoutButton />
-        </CardContent>
-      </Card>
-    </main>
+        </div>
+      </main>
+    </>
   );
 }
