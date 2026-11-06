@@ -161,7 +161,7 @@ export function GuitarProViewer({ fileUrl }: { fileUrl: string }) {
         ref={scrollRef}
         className="relative h-[75vh] overflow-y-auto rounded-lg border bg-white text-black"
       >
-        <div ref={hostRef} />
+        <div ref={hostRef} className="relative" />
       </div>
     </div>
   );
