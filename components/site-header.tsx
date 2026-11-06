@@ -17,6 +17,9 @@ export async function SiteHeader() {
         <Link href="/hledat" className={buttonVariants({ className: blackButton })}>
           Hledat noty
         </Link>
+        <Link href="/vyzva" className={buttonVariants({ className: blackButton })}>
+          Daily Challenge
+        </Link>
         {session ? (
           <>
             <Link href="/nahrat" className={buttonVariants({ className: blackButton })}>
