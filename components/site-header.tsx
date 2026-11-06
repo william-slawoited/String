@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
+import { Mail } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 
 const blackButton = "bg-black text-white hover:bg-black/80";
@@ -19,6 +20,14 @@ export async function SiteHeader() {
         </Link>
         <Link href="/vyzva" className={buttonVariants({ className: blackButton })}>
           Daily Challenge
+        </Link>
+        <Link
+          href="/kontakt"
+          title="Kontakt"
+          aria-label="Kontakt"
+          className={buttonVariants({ size: "icon", className: blackButton })}
+        >
+          <Mail className="h-4 w-4" />
         </Link>
         {session ? (
           <>
