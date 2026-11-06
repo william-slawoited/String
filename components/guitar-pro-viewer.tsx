@@ -9,9 +9,28 @@ import {
   Play,
   Repeat,
   Square,
-  Timer,
 } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
+
+function MetronomeIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <path d="M10 3h4l4.5 18h-13z" />
+      <path d="M12 17 16 7" />
+      <circle cx="14.4" cy="11" r="1" />
+    </svg>
+  );
+}
 
 const SPEEDS = [0.5, 0.75, 0.9, 1, 1.25, 1.5];
 const base =
@@ -150,7 +169,7 @@ export function GuitarProViewer({ fileUrl }: { fileUrl: string }) {
           disabled={!ready}
           onClick={toggleMetronome}
         >
-          <Timer className="h-4 w-4" />
+          <MetronomeIcon className="h-4 w-4" />
         </IconButton>
         <IconButton
           label="Opakovat"
