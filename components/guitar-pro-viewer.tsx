@@ -1,13 +1,50 @@
 "use client";
 
 import { AlphaTabApi, model, synth } from "@coderline/alphatab";
-import { useEffect, useRef, useState } from "react";
+import {
+  Gauge,
+  ListMusic,
+  Loader2,
+  Pause,
+  Play,
+  Repeat,
+  Square,
+  Timer,
+} from "lucide-react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 const SPEEDS = [0.5, 0.75, 0.9, 1, 1.25, 1.5];
-const btn =
-  "rounded-md bg-black px-3 py-1.5 text-sm text-white hover:bg-black/80 disabled:opacity-40";
-const btnOutline =
-  "rounded-md border px-3 py-1.5 text-sm hover:bg-black/5 disabled:opacity-40";
+const base =
+  "inline-flex h-9 w-9 items-center justify-center rounded-md disabled:opacity-40";
+const solid = `${base} bg-black text-white hover:bg-black/80`;
+const outline = `${base} border hover:bg-black/5`;
+
+function IconButton({
+  label,
+  onClick,
+  disabled,
+  active,
+  children,
+}: {
+  label: string;
+  onClick: () => void;
+  disabled?: boolean;
+  active?: boolean;
+  children: ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      title={label}
+      aria-label={label}
+      className={active ? solid : outline}
+      disabled={disabled}
+      onClick={onClick}
+    >
+      {children}
+    </button>
+  );
+}
 
 export function GuitarProViewer({ fileUrl }: { fileUrl: string }) {
   const hostRef = useRef<HTMLDivElement>(null);
@@ -34,6 +71,8 @@ export function GuitarProViewer({ fileUrl }: { fileUrl: string }) {
       player: {
         enablePlayer: true,
         enableCursor: true,
+        enableAnimatedBeatCursor: true,
+        enableElementHighlighting: true,
         enableUserInteraction: true,
         soundFont: "/alphatab/soundfont/sonivox.sf2",
         scrollElement: scrollRef.current!,
@@ -90,42 +129,41 @@ export function GuitarProViewer({ fileUrl }: { fileUrl: string }) {
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-wrap items-center gap-2">
-        <button
-          type="button"
-          className={btn}
+        <IconButton
+          label={playing ? "Pauza" : "Přehrát"}
+          active
           disabled={!ready}
           onClick={() => apiRef.current?.playPause()}
         >
-          {playing ? "Pauza" : "Přehrát"}
-        </button>
-        <button
-          type="button"
-          className={btnOutline}
+          {playing ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+        </IconButton>
+        <IconButton
+          label="Stop"
           disabled={!ready}
           onClick={() => apiRef.current?.stop()}
         >
-          Stop
-        </button>
-        <button
-          type="button"
-          className={metronome ? btn : btnOutline}
+          <Square className="h-4 w-4" />
+        </IconButton>
+        <IconButton
+          label="Metronom"
+          active={metronome}
           disabled={!ready}
           onClick={toggleMetronome}
         >
-          Metronom
-        </button>
-        <button
-          type="button"
-          className={loop ? btn : btnOutline}
+          <Timer className="h-4 w-4" />
+        </IconButton>
+        <IconButton
+          label="Opakovat"
+          active={loop}
           disabled={!ready}
           onClick={toggleLoop}
         >
-          Opakovat
-        </button>
-        <label className="flex items-center gap-1 text-sm">
-          Tempo
+          <Repeat className="h-4 w-4" />
+        </IconButton>
+        <label className="flex items-center gap-1" title="Tempo">
+          <Gauge className="h-4 w-4" />
           <select
-            className="h-8 rounded-md border bg-transparent px-2 text-sm"
+            className="h-9 rounded-md border bg-transparent px-2 text-sm"
             value={speed}
             onChange={(e) => changeSpeed(Number(e.target.value))}
           >
@@ -137,10 +175,10 @@ export function GuitarProViewer({ fileUrl }: { fileUrl: string }) {
           </select>
         </label>
         {tracks.length > 1 && (
-          <label className="flex items-center gap-1 text-sm">
-            Stopa
+          <label className="flex items-center gap-1" title="Stopa">
+            <ListMusic className="h-4 w-4" />
             <select
-              className="h-8 rounded-md border bg-transparent px-2 text-sm"
+              className="h-9 rounded-md border bg-transparent px-2 text-sm"
               value={track}
               onChange={(e) => selectTrack(Number(e.target.value))}
             >
@@ -152,10 +190,13 @@ export function GuitarProViewer({ fileUrl }: { fileUrl: string }) {
             </select>
           </label>
         )}
+        {!ready && !error && (
+          <Loader2
+            className="h-4 w-4 animate-spin text-muted-foreground"
+            aria-label="Načítám noty a zvuk"
+          />
+        )}
       </div>
-      {!ready && !error && (
-        <p className="text-sm text-muted-foreground">Načítám noty a zvuk…</p>
-      )}
       {error && <p className="text-sm text-red-600">{error}</p>}
       <div
         ref={scrollRef}

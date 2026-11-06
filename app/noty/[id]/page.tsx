@@ -7,6 +7,7 @@ import { db } from "@/db";
 import { favorites, scores } from "@/db/schema";
 import { SiteHeader } from "@/components/site-header";
 import { GuitarProViewer } from "@/components/guitar-pro-viewer";
+import { ArrowLeft, Download, Heart } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 
 export const instant = false;
@@ -51,8 +52,13 @@ export default async function NotyDetailPage({
     <>
       <SiteHeader />
       <main className="mx-auto flex w-full max-w-4xl flex-col gap-6 p-6">
-        <Link href="/hledat" className="text-sm underline">
-          ← Zpět na vyhledávání
+        <Link
+          href="/hledat"
+          title="Zpět na vyhledávání"
+          aria-label="Zpět na vyhledávání"
+          className={buttonVariants({ variant: "outline", size: "icon" })}
+        >
+          <ArrowLeft className="h-4 w-4" />
         </Link>
         <div>
           <h1 className="text-3xl font-bold tracking-tight">{score.title}</h1>
@@ -72,17 +78,21 @@ export default async function NotyDetailPage({
           <a
             href={`/noty/${score.id}/soubor`}
             download
-            className={buttonVariants({ className: blackButton })}
+            title="Stáhnout soubor"
+            aria-label="Stáhnout soubor"
+            className={buttonVariants({ size: "icon", className: blackButton })}
           >
-            Stáhnout soubor
+            <Download className="h-4 w-4" />
           </a>
           {session && (
             <form action={`/api/oblibene/${score.id}`} method="post">
               <button
                 type="submit"
-                className={buttonVariants({ variant: "outline" })}
+                title={isFavorite ? "Odebrat z oblíbených" : "Přidat do oblíbených"}
+                aria-label={isFavorite ? "Odebrat z oblíbených" : "Přidat do oblíbených"}
+                className={buttonVariants({ variant: "outline", size: "icon" })}
               >
-                {isFavorite ? "♥ Odebrat z oblíbených" : "♡ Přidat do oblíbených"}
+                <Heart className={isFavorite ? "h-4 w-4 fill-current" : "h-4 w-4"} />
               </button>
             </form>
           )}

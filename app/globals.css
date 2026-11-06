@@ -143,3 +143,7 @@
   fill: #0078ff;
   stroke: #0078ff;
 }
+
+.at-cursor-bar { background: rgba(255, 242, 0, 0.35) !important; }
+.at-cursor-beat { background: rgba(64, 64, 255, 0.9) !important; width: 3px !important; }
+.at-highlight * { fill: #0078ff !important; stroke: #0078ff !important; }
