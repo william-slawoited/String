@@ -6,6 +6,7 @@ import { auth } from "@/lib/auth";
 import { db } from "@/db";
 import { favorites, scores } from "@/db/schema";
 import { SiteHeader } from "@/components/site-header";
+import { GuitarProViewer } from "@/components/guitar-pro-viewer";
 import { buttonVariants } from "@/components/ui/button";
 
 export const instant = false;
@@ -28,6 +29,8 @@ export default async function NotyDetailPage({
     .limit(1);
   if (!score) notFound();
 
+  const isPdf = (score.fileUrl ?? "").toLowerCase().endsWith(".pdf");
+
   const session = await auth.api.getSession({ headers: await headers() });
   let isFavorite = false;
   if (session) {
@@ -47,7 +50,7 @@ export default async function NotyDetailPage({
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto flex w-full max-w-2xl flex-col gap-6 p-6">
+      <main className="mx-auto flex w-full max-w-4xl flex-col gap-6 p-6">
         <Link href="/hledat" className="text-sm underline">
           ← Zpět na vyhledávání
         </Link>
@@ -57,7 +60,7 @@ export default async function NotyDetailPage({
             {score.composer ?? "Neznámý autor"}
           </p>
         </div>
-        <dl className="grid grid-cols-2 gap-2 text-sm">
+        <dl className="grid max-w-md grid-cols-2 gap-2 text-sm">
           <dt className="text-muted-foreground">Nástroj</dt>
           <dd>{score.instrument ?? "–"}</dd>
           <dt className="text-muted-foreground">Žánr</dt>
@@ -71,7 +74,7 @@ export default async function NotyDetailPage({
             download
             className={buttonVariants({ className: blackButton })}
           >
-            Stáhnout PDF
+            Stáhnout soubor
           </a>
           {session && (
             <form action={`/api/oblibene/${score.id}`} method="post">
@@ -84,11 +87,16 @@ export default async function NotyDetailPage({
             </form>
           )}
         </div>
-        <iframe
-          src={`/noty/${score.id}/soubor`}
-          title={`Noty: ${score.title}`}
-          className="h-[80vh] w-full rounded-lg border"
-        />
+
+        {isPdf ? (
+          <iframe
+            src={`/noty/${score.id}/soubor`}
+            title={`Noty: ${score.title}`}
+            className="h-[80vh] w-full rounded-lg border"
+          />
+        ) : (
+          <GuitarProViewer fileUrl={`/noty/${score.id}/soubor`} />
+        )}
       </main>
     </>
   );

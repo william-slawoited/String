@@ -8,6 +8,17 @@ import { db } from "@/db";
 import { scores } from "@/db/schema";
 
 const MAX_SIZE = 10 * 1024 * 1024;
+const ALLOWED = [".pdf", ".gp", ".gp3", ".gp4", ".gp5", ".gpx"];
+
+function contentOk(ext: string, b: Buffer) {
+  if (ext === ".pdf") return b.subarray(0, 4).toString() === "%PDF";
+  if (ext === ".gp") return b[0] === 0x50 && b[1] === 0x4b;
+  if (ext === ".gpx") {
+    const h = b.subarray(0, 4).toString();
+    return h === "BCFZ" || h === "BCFS";
+  }
+  return b.subarray(1, 19).toString("latin1") === "FICHIER GUITAR PRO";
+}
 
 function back(req: Request, message: string) {
   const url = new URL("/nahrat", req.url);
@@ -33,16 +44,21 @@ export async function POST(req: Request) {
   if (!title) return back(req, "Vyplň název skladby.");
   if (!rights) return back(req, "Potvrď, že máš právo soubor sdílet.");
   if (!(file instanceof File) || file.size === 0) {
-    return back(req, "Vyber soubor PDF.");
+    return back(req, "Vyber soubor (PDF nebo Guitar Pro).");
   }
   if (file.size > MAX_SIZE) return back(req, "Soubor je větší než 10 MB.");
 
-  const bytes = Buffer.from(await file.arrayBuffer());
-  if (bytes.subarray(0, 4).toString() !== "%PDF") {
-    return back(req, "Soubor musí být PDF.");
+  const ext = path.extname(file.name).toLowerCase();
+  if (!ALLOWED.includes(ext)) {
+    return back(req, "Povolené jsou soubory PDF, .gp, .gp3, .gp4, .gp5 a .gpx.");
   }
 
-  const filename = `${randomUUID()}.pdf`;
+  const bytes = Buffer.from(await file.arrayBuffer());
+  if (!contentOk(ext, bytes)) {
+    return back(req, "Obsah souboru neodpovídá jeho příponě.");
+  }
+
+  const filename = `${randomUUID()}${ext}`;
   const dir = path.join(process.cwd(), "uploads");
   await mkdir(dir, { recursive: true });
   await writeFile(path.join(dir, filename), bytes);

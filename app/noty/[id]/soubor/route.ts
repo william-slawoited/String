@@ -21,14 +21,16 @@ export async function GET(
     .limit(1);
   if (!score?.fileUrl) return new Response("Nenalezeno", { status: 404 });
 
+  const name = path.basename(score.fileUrl);
+  const ext = path.extname(name).toLowerCase();
+
   try {
-    const file = await readFile(
-      path.join(process.cwd(), "uploads", path.basename(score.fileUrl))
-    );
+    const file = await readFile(path.join(process.cwd(), "uploads", name));
     return new Response(new Uint8Array(file), {
       headers: {
-        "Content-Type": "application/pdf",
-        "Content-Disposition": `inline; filename="${score.id}.pdf"`,
+        "Content-Type":
+          ext === ".pdf" ? "application/pdf" : "application/octet-stream",
+        "Content-Disposition": `inline; filename="${score.id}${ext}"`,
       },
     });
   } catch {
