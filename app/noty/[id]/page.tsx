@@ -84,6 +84,11 @@ export default async function NotyDetailPage({
             </form>
           )}
         </div>
+        <iframe
+          src={`/noty/${score.id}/soubor`}
+          title={`Noty: ${score.title}`}
+          className="h-[80vh] w-full rounded-lg border"
+        />
       </main>
     </>
   );
