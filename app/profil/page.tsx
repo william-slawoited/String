@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { desc, eq } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { db } from "@/db";
-import { scores } from "@/db/schema";
+import { favorites, scores } from "@/db/schema";
 import { SiteHeader } from "@/components/site-header";
 import { ScoreList } from "@/components/score-list";
 import { LogoutButton } from "@/components/logout-button";
@@ -22,6 +22,12 @@ export default async function ProfilPage() {
     .where(eq(scores.uploadedBy, user.id))
     .orderBy(desc(scores.createdAt));
 
+  const favRows = await db
+    .select({ score: scores })
+    .from(favorites)
+    .innerJoin(scores, eq(favorites.scoreId, scores.id))
+    .where(eq(favorites.userId, user.id));
+
   return (
     <>
       <SiteHeader />
@@ -32,13 +38,13 @@ export default async function ProfilPage() {
         </section>
 
         <section className="flex flex-col gap-3">
-          <h2 className="text-xl font-semibold">Moje nahrané noty</h2>
-          <ScoreList items={mine} deletable />
+          <h2 className="text-xl font-semibold">Oblíbené noty</h2>
+          <ScoreList items={favRows.map((f) => f.score)} />
         </section>
 
         <section className="flex flex-col gap-3">
-          <h2 className="text-xl font-semibold">Oblíbené noty</h2>
-          <p className="text-sm text-muted-foreground">Zatím žádné.</p>
+          <h2 className="text-xl font-semibold">Moje nahrané noty</h2>
+          <ScoreList items={mine} deletable />
         </section>
 
         <div>

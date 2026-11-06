@@ -1,12 +1,16 @@
 import Link from "next/link";
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
+import { auth } from "@/lib/auth";
 import { db } from "@/db";
-import { scores } from "@/db/schema";
+import { favorites, scores } from "@/db/schema";
 import { SiteHeader } from "@/components/site-header";
 import { buttonVariants } from "@/components/ui/button";
 
 export const instant = false;
+
+const blackButton = "bg-black text-white hover:bg-black/80";
 
 export default async function NotyDetailPage({
   params,
@@ -24,6 +28,22 @@ export default async function NotyDetailPage({
     .limit(1);
   if (!score) notFound();
 
+  const session = await auth.api.getSession({ headers: await headers() });
+  let isFavorite = false;
+  if (session) {
+    const [fav] = await db
+      .select()
+      .from(favorites)
+      .where(
+        and(
+          eq(favorites.userId, session.user.id),
+          eq(favorites.scoreId, scoreId)
+        )
+      )
+      .limit(1);
+    isFavorite = !!fav;
+  }
+
   return (
     <>
       <SiteHeader />
@@ -33,7 +53,9 @@ export default async function NotyDetailPage({
         </Link>
         <div>
           <h1 className="text-3xl font-bold tracking-tight">{score.title}</h1>
-          <p className="text-muted-foreground">{score.composer ?? "Neznámý autor"}</p>
+          <p className="text-muted-foreground">
+            {score.composer ?? "Neznámý autor"}
+          </p>
         </div>
         <dl className="grid grid-cols-2 gap-2 text-sm">
           <dt className="text-muted-foreground">Nástroj</dt>
@@ -43,14 +65,24 @@ export default async function NotyDetailPage({
           <dt className="text-muted-foreground">Obtížnost</dt>
           <dd>{score.difficulty ? `${score.difficulty} / 5` : "–"}</dd>
         </dl>
-        <div>
+        <div className="flex flex-wrap gap-3">
           <a
             href={`/noty/${score.id}/soubor`}
             download
-            className={buttonVariants({ className: "bg-black text-white hover:bg-black/80" })}
+            className={buttonVariants({ className: blackButton })}
           >
             Stáhnout PDF
           </a>
+          {session && (
+            <form action={`/api/oblibene/${score.id}`} method="post">
+              <button
+                type="submit"
+                className={buttonVariants({ variant: "outline" })}
+              >
+                {isFavorite ? "♥ Odebrat z oblíbených" : "♡ Přidat do oblíbených"}
+              </button>
+            </form>
+          )}
         </div>
       </main>
     </>
