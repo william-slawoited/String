@@ -42,3 +42,5 @@ next-env.d.ts
 
 # Databáze
 local.dbuploads/
+
+public/alphatab

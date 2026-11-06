@@ -6,10 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "predev": "node scripts/copy-alphatab-assets.mjs",
+    "prebuild": "node scripts/copy-alphatab-assets.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
+    "@coderline/alphatab": "^1.9.0",
     "@libsql/client": "^0.18.0",
     "better-auth": "^1.7.12",
     "class-variance-authority": "^0.7.1",
@@ -32,5 +35,10 @@
     "eslint-config-next": "16.4.1",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "allowScripts": {
+    "esbuild@0.18.20": true,
+    "esbuild@0.25.12": true,
+    "esbuild@0.28.2": true
   }
 }
