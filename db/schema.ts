@@ -11,6 +11,7 @@ export const scores = sqliteTable("scores", {
   genre: text("genre"),
   difficulty: integer("difficulty"),
   fileUrl: text("file_url"),
+  artistId: integer("artist_id"),
   uploadedBy: text("uploaded_by").references(() => user.id),
   createdAt: integer("created_at", { mode: "timestamp" })
     .notNull()
@@ -35,6 +36,16 @@ export const messages = sqliteTable("messages", {
   name: text("name").notNull(),
   email: text("email").notNull(),
   message: text("message").notNull(),
+  createdAt: integer("created_at", { mode: "timestamp" })
+    .notNull()
+    .$defaultFn(() => new Date()),
+});
+
+export const artists = sqliteTable("artists", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull().unique(),
+  verified: integer("verified", { mode: "boolean" }).notNull().default(false),
+  suggestedBy: text("suggested_by"),
   createdAt: integer("created_at", { mode: "timestamp" })
     .notNull()
     .$defaultFn(() => new Date()),

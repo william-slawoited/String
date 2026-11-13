@@ -67,8 +67,6 @@ export default async function NotyDetailPage({
           </p>
         </div>
         <dl className="grid max-w-md grid-cols-2 gap-2 text-sm">
-          <dt className="text-muted-foreground">Nástroj</dt>
-          <dd>{score.instrument ?? "–"}</dd>
           <dt className="text-muted-foreground">Žánr</dt>
           <dd>{score.genre ?? "–"}</dd>
           <dt className="text-muted-foreground">Obtížnost</dt>

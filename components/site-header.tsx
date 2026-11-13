@@ -2,6 +2,7 @@ import Link from "next/link";
 import { headers } from "next/headers";
 import {
   CalendarCheck,
+  ShieldCheck,
   LogIn,
   Search,
   Upload,
@@ -9,6 +10,7 @@ import {
   UserPlus,
 } from "lucide-react";
 import { auth } from "@/lib/auth";
+import { isAdminEmail } from "@/lib/admin";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 function NavItem({
@@ -54,6 +56,11 @@ export async function SiteHeader() {
         <NavItem href="/vyzva" label="Daily Challenge">
           <CalendarCheck className="h-4 w-4 shrink-0" />
         </NavItem>
+        {isAdminEmail(session?.user.email) && (
+          <NavItem href="/admin/interpreti" label="Interpreti">
+            <ShieldCheck className="h-4 w-4 shrink-0" />
+          </NavItem>
+        )}
         <span className="mx-1 h-6 w-px bg-border" aria-hidden="true" />
         {session ? (
           <NavItem href="/profil" label="Můj profil">

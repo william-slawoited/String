@@ -3,9 +3,10 @@ import { headers } from "next/headers";
 import { randomUUID } from "crypto";
 import { mkdir, writeFile } from "fs/promises";
 import path from "path";
+import { and, eq } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { db } from "@/db";
-import { scores } from "@/db/schema";
+import { artists, scores } from "@/db/schema";
 
 const MAX_SIZE = 10 * 1024 * 1024;
 const ALLOWED = [".pdf", ".gp", ".gp3", ".gp4", ".gp5", ".gpx"];
@@ -34,14 +35,22 @@ export async function POST(req: Request) {
 
   const form = await req.formData();
   const title = String(form.get("title") ?? "").trim();
-  const composer = String(form.get("composer") ?? "").trim();
-  const instrument = String(form.get("instrument") ?? "").trim();
+  const artistId = Number(form.get("artistId"));
   const genre = String(form.get("genre") ?? "").trim();
   const difficulty = Number(form.get("difficulty"));
   const rights = form.get("rights");
   const file = form.get("file");
 
   if (!title) return back(req, "Vyplň název skladby.");
+  if (!Number.isInteger(artistId)) return back(req, "Vyber interpreta.");
+
+  const [artist] = await db
+    .select()
+    .from(artists)
+    .where(and(eq(artists.id, artistId), eq(artists.verified, true)))
+    .limit(1);
+  if (!artist) return back(req, "Vyber ověřeného interpreta.");
+
   if (!rights) return back(req, "Potvrď, že máš právo soubor sdílet.");
   if (!(file instanceof File) || file.size === 0) {
     return back(req, "Vyber soubor (PDF nebo Guitar Pro).");
@@ -67,8 +76,8 @@ export async function POST(req: Request) {
     .insert(scores)
     .values({
       title,
-      composer: composer || null,
-      instrument: instrument || null,
+      composer: artist.name,
+      artistId: artist.id,
       genre: genre || null,
       difficulty: difficulty >= 1 && difficulty <= 5 ? difficulty : null,
       fileUrl: filename,
