@@ -164,3 +164,11 @@
 .dark .invert-in-dark {
   filter: invert(1) hue-rotate(180deg);
 }
+
+body,
+button,
+input,
+select,
+textarea {
+  font-family: var(--font-app), ui-sans-serif, system-ui, sans-serif;
+}
