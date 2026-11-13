@@ -170,5 +170,5 @@ button,
 input,
 select,
 textarea {
-  font-family: var(--font-app), ui-sans-serif, system-ui, sans-serif;
+  font-family: "Plus Jakarta Sans Variable", ui-sans-serif, system-ui, sans-serif;
 }

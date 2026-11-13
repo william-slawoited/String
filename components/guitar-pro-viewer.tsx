@@ -93,7 +93,7 @@ export function GuitarProViewer({ fileUrl }: { fileUrl: string }) {
         enableAnimatedBeatCursor: true,
         enableElementHighlighting: true,
         enableUserInteraction: true,
-        soundFont: "/alphatab/soundfont/sonivox.sf2",
+        soundFont: "/soundfonts/GeneralUser-GS.sf2",
         scrollElement: scrollRef.current!,
       },
     });
