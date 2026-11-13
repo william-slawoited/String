@@ -93,7 +93,7 @@ export default async function NahratPage({
                 </span>
               </label>
               {chyba && <p className="text-sm text-red-600">{chyba}</p>}
-              <Button type="submit" className="bg-black text-white hover:bg-black/80">
+              <Button type="submit" className="bg-foreground text-background hover:bg-foreground/80">
                 Nahrát
               </Button>
             </form>

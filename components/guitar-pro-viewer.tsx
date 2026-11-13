@@ -35,8 +35,8 @@ function MetronomeIcon({ className }: { className?: string }) {
 const SPEEDS = [0.5, 0.75, 0.9, 1, 1.25, 1.5];
 const base =
   "inline-flex h-9 w-9 items-center justify-center rounded-md disabled:opacity-40";
-const solid = `${base} bg-black text-white hover:bg-black/80`;
-const outline = `${base} border hover:bg-black/5`;
+const solid = `${base} bg-foreground text-background hover:bg-foreground/80`;
+const outline = `${base} border hover:bg-foreground/5`;
 
 function IconButton({
   label,
@@ -219,7 +219,7 @@ export function GuitarProViewer({ fileUrl }: { fileUrl: string }) {
       {error && <p className="text-sm text-red-600">{error}</p>}
       <div
         ref={scrollRef}
-        className="relative h-[75vh] overflow-y-auto rounded-lg border bg-white text-black"
+        className="relative h-[75vh] overflow-y-auto rounded-lg border bg-white text-black dark:invert"
       >
         <div ref={hostRef} className="relative" />
       </div>

@@ -7,7 +7,7 @@ import { buttonVariants } from "@/components/ui/button";
 
 export const instant = false;
 
-const blackButton = "bg-black text-white hover:bg-black/80";
+const blackButton = "bg-foreground text-background hover:bg-foreground/80";
 
 const tasks = [
   "Zahraj skladbu pomalu, o polovinu pod původním tempem, a drž rovnoměrný rytmus.",

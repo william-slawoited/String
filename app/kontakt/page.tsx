@@ -53,7 +53,7 @@ export default async function KontaktPage({
               type="submit"
               title="Odeslat"
               aria-label="Odeslat"
-              className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-black px-4 text-white hover:bg-black/80"
+              className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-foreground px-4 text-background hover:bg-foreground/80"
             >
               <Send className="h-4 w-4" />
             </button>

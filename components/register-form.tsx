@@ -87,7 +87,7 @@ export function RegisterForm() {
               />
             </div>
             {error && <p className="text-sm text-red-600">{error}</p>}
-            <Button type="submit" disabled={loading} className="bg-black text-white hover:bg-black/80">
+            <Button type="submit" disabled={loading} className="bg-foreground text-background hover:bg-foreground/80">
               {loading ? "Vytvářím účet..." : "Zaregistrovat se"}
             </Button>
             <p className="text-center text-sm text-muted-foreground">

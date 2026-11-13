@@ -9,6 +9,7 @@ import {
   UserPlus,
 } from "lucide-react";
 import { auth } from "@/lib/auth";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 function NavItem({
   href,
@@ -23,10 +24,10 @@ function NavItem({
     <Link
       href={href}
       aria-label={label}
-      className="group inline-flex h-9 items-center rounded-md bg-black px-2.5 text-white transition-colors hover:bg-black/80 focus-visible:bg-black/80"
+      className="group inline-flex h-9 flex-row-reverse items-center rounded-md bg-foreground px-2.5 text-background transition-colors hover:bg-foreground/80 focus-visible:bg-foreground/80"
     >
       {children}
-      <span className="max-w-0 overflow-hidden whitespace-nowrap text-sm opacity-0 transition-all duration-300 ease-out group-hover:ml-2 group-hover:max-w-40 group-hover:opacity-100 group-focus-visible:ml-2 group-focus-visible:max-w-40 group-focus-visible:opacity-100">
+      <span className="max-w-0 overflow-hidden whitespace-nowrap text-sm opacity-0 transition-all duration-300 ease-out group-hover:mr-2 group-hover:max-w-40 group-hover:opacity-100 group-focus-visible:mr-2 group-focus-visible:max-w-40 group-focus-visible:opacity-100">
         {label}
       </span>
     </Link>
@@ -37,7 +38,7 @@ export async function SiteHeader() {
   const session = await auth.api.getSession({ headers: await headers() });
 
   return (
-    <header className="flex items-center gap-4 border-b px-4 py-3 sm:px-6">
+    <header className="flex items-center justify-between gap-3 border-b px-4 py-3 sm:px-6">
       <Link href="/" className="text-xl font-bold tracking-tight">
         String
       </Link>
@@ -68,6 +69,7 @@ export async function SiteHeader() {
             </NavItem>
           </>
         )}
+        <ThemeToggle />
       </nav>
     </header>
   );

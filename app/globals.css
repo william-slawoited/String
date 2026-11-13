@@ -147,3 +147,16 @@
 .at-cursor-bar { background: rgba(255, 242, 0, 0.35) !important; }
 .at-cursor-beat { background: rgba(64, 64, 255, 0.9) !important; width: 3px !important; }
 .at-highlight * { fill: #0078ff !important; stroke: #0078ff !important; }
+
+.dark {
+  color-scheme: dark;
+  --background: oklch(0 0 0);
+  --foreground: oklch(1 0 0);
+  --card: oklch(0 0 0);
+  --card-foreground: oklch(1 0 0);
+  --popover: oklch(0 0 0);
+  --popover-foreground: oklch(1 0 0);
+  --muted-foreground: oklch(0.85 0 0);
+  --border: oklch(1 0 0 / 25%);
+  --input: oklch(1 0 0 / 25%);
+}

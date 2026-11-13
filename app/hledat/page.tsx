@@ -43,7 +43,7 @@ export default async function HledatPage({
         <form action="/hledat" className="flex flex-col gap-2 sm:flex-row">
           <Input name="q" defaultValue={term} placeholder="Název, skladatel, žánr…" />
           <Input name="nastroj" defaultValue={instrument} placeholder="Nástroj" className="sm:max-w-40" />
-          <Button type="submit" className="bg-black text-white hover:bg-black/80">
+          <Button type="submit" className="bg-foreground text-background hover:bg-foreground/80">
             Hledat
           </Button>
         </form>

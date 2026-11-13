@@ -12,7 +12,7 @@ import { buttonVariants } from "@/components/ui/button";
 
 export const instant = false;
 
-const blackButton = "bg-black text-white hover:bg-black/80";
+const blackButton = "bg-foreground text-background hover:bg-foreground/80";
 
 export default async function NotyDetailPage({
   params,
@@ -102,7 +102,7 @@ export default async function NotyDetailPage({
           <iframe
             src={`/noty/${score.id}/soubor`}
             title={`Noty: ${score.title}`}
-            className="h-[80vh] w-full rounded-lg border"
+            className="h-[80vh] w-full rounded-lg border dark:invert"
           />
         ) : (
           <GuitarProViewer fileUrl={`/noty/${score.id}/soubor`} />
