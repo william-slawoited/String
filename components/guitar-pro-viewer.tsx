@@ -219,7 +219,7 @@ export function GuitarProViewer({ fileUrl }: { fileUrl: string }) {
       {error && <p className="text-sm text-red-600">{error}</p>}
       <div
         ref={scrollRef}
-        className="relative h-[75vh] overflow-y-auto rounded-lg border bg-white text-black dark:invert"
+        className="relative h-[75vh] overflow-y-auto rounded-lg border bg-white text-black invert-in-dark"
       >
         <div ref={hostRef} className="relative" />
       </div>

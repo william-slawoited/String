@@ -102,7 +102,7 @@ export default async function NotyDetailPage({
           <iframe
             src={`/noty/${score.id}/soubor`}
             title={`Noty: ${score.title}`}
-            className="h-[80vh] w-full rounded-lg border dark:invert"
+            className="h-[80vh] w-full rounded-lg border invert-in-dark"
           />
         ) : (
           <GuitarProViewer fileUrl={`/noty/${score.id}/soubor`} />
